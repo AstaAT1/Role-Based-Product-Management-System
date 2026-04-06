@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MailController;
+use  Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
 
 
 Route::get('/', function () {
@@ -55,7 +57,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/send-mail', [MailController::class, 'send']);
-Route::get('/preview-mail', [MailController::class, 'preview']);
+Route::get('/send-mail', [MailController::class, 'send'])->name('send.mail');
+Route::get('/test-mail', function () {
+    Mail::raw('Test message', function ($message) {
+$message->to('kun443756@gmail.com')
+                ->subject('Test Email');
+    });
+
+    return 'sent';
+});
 
 require __DIR__.'/auth.php';
